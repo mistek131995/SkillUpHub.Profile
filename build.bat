@@ -1,0 +1,1 @@
+docker build -t skillhub_profile_api .

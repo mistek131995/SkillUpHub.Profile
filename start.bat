@@ -1,0 +1,1 @@
+docker run --name SkillHubProfileAPI --network skillhub -p 8081:8080 -d skillhub_profile_api
