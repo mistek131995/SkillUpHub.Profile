@@ -1,9 +1,9 @@
 /SkillUpHub.Profile.API/appsettings.json
-/SkillUpHub.Profile.API/bin/
-/SkillUpHub.Profile.API/obj/
-/SkillUpHub.Profile.Application/bin/
-/SkillUpHub.Profile.Application/obj/
-/SkillUpHub.Profile.Contract/bin/
-/SkillUpHub.Profile.Contract/obj/
-/SkillUpHub.Profile.API/Infrastructure/
-/SkillUpHub.Profile.API/Infrastructure/
+/SkillUpHub.Profile.API/bin/*
+/SkillUpHub.Profile.API/obj/*
+/SkillUpHub.Profile.Application/bin/*
+/SkillUpHub.Profile.Application/obj/*
+/SkillUpHub.Profile.Contract/bin/*
+/SkillUpHub.Profile.Contract/obj/*
+/SkillUpHub.Profile.Infrastructure/obj/*
+/SkillUpHub.Profile.Infrastructure/bin/*

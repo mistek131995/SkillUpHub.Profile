@@ -5,8 +5,6 @@ option csharp_namespace = "SkillUpHub.Profile";
 package ProfileService;
 
 service ProfileService {
-  // Sends a greeting
-  //rpc SayHello (HelloRequest) returns (HelloReply);
   rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
 }
 
