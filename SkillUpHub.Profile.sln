@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillUpHub.Profile.API", "SkillUpHub.Profile.API\SkillUpHub.Profile.API.csproj", "{3E951ED1-720E-4864-9A6D-787024857153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillUpHub.Profile.Application", "SkillUpHub.Profile.Application\SkillUpHub.Profile.Application.csproj", "{EC045788-7227-415E-A624-F862B2C8D887}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillUpHub.Profile.Contract", "SkillUpHub.Profile.Contract\SkillUpHub.Profile.Contract.csproj", "{3F944288-E8E2-4A33-9A3A-DBD92F4E8BBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillUpHub.Profile.Infrastructure", "SkillUpHub.Profile.Infrastructure\SkillUpHub.Profile.Infrastructure.csproj", "{499AA2F9-CFE5-4F79-AFC1-51E56DB7324B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E951ED1-720E-4864-9A6D-787024857153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E951ED1-720E-4864-9A6D-787024857153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E951ED1-720E-4864-9A6D-787024857153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E951ED1-720E-4864-9A6D-787024857153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC045788-7227-415E-A624-F862B2C8D887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC045788-7227-415E-A624-F862B2C8D887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC045788-7227-415E-A624-F862B2C8D887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC045788-7227-415E-A624-F862B2C8D887}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F944288-E8E2-4A33-9A3A-DBD92F4E8BBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F944288-E8E2-4A33-9A3A-DBD92F4E8BBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F944288-E8E2-4A33-9A3A-DBD92F4E8BBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F944288-E8E2-4A33-9A3A-DBD92F4E8BBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{499AA2F9-CFE5-4F79-AFC1-51E56DB7324B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{499AA2F9-CFE5-4F79-AFC1-51E56DB7324B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{499AA2F9-CFE5-4F79-AFC1-51E56DB7324B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{499AA2F9-CFE5-4F79-AFC1-51E56DB7324B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

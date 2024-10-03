@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "SkillUpHub.Profile";
+
+package ProfileService;
+
+service ProfileService {
+  // Sends a greeting
+  //rpc SayHello (HelloRequest) returns (HelloReply);
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+}
+
+message GetProfileRequest{
+  string id = 1;
+}
+
+message GetProfileResponse{
+  string FirstName = 1;
+}
