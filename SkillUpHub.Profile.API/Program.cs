@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SkillUpHub.Profile.API.Middlewares;
 using SkillUpHub.Profile.API.Services;
 using SkillUpHub.Profile.Contract.Providers;
 using SkillUpHub.Profile.Infrastructure.Contexts;
@@ -53,7 +54,10 @@ builder.Services.AddScoped<IRepositoryProvider, RepositoryProvider>();
 builder.Services.AddScoped<IServiceProvider, ServiceProvider>();
 
 builder.Services.AddAuthorization();
-builder.Services.AddGrpc();
+builder.Services.AddGrpc(options =>
+{
+    options.Interceptors.Add<GrpcExceptionInterceptor>(); // Регистрируем Interceptor
+});
 
 builder.Services.AddCors(x => x.AddPolicy("CORS", builder =>
 {

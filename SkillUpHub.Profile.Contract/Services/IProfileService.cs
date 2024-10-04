@@ -2,6 +2,9 @@
 
 public interface IProfileService : IBaseService
 {
-    public record ProfileDTO(Guid UserId, string FirstName, string LastName, string Description);
-    public Task SaveProfile(ProfileDTO profileDTO);
+    public record SaveProfileDTO(Guid UserId, string FirstName, string LastName, string Description);
+    public Task SaveProfileAsync(SaveProfileDTO profileDTO);
+    
+    public record GetProfileDTO(string FirstName, string LastName, string Description);
+    public Task<GetProfileDTO> GetProfileAsync(Guid userId);
 }

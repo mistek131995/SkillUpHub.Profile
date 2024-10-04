@@ -5,7 +5,7 @@ namespace SkillHub.Profile.Application.Services;
 
 public class ProfileService(IRepositoryProvider repositoryProvider) : IProfileService
 {
-    public async Task SaveProfile(IProfileService.ProfileDTO profileDTO)
+    public async Task SaveProfileAsync(IProfileService.SaveProfileDTO profileDTO)
     {
         var profile = await repositoryProvider.ProfileRepository.GetByUserIdAsync(profileDTO.UserId) ??
                       new SkillUpHub.Profile.Contract.Models.Profile(
@@ -14,5 +14,13 @@ public class ProfileService(IRepositoryProvider repositoryProvider) : IProfileSe
                           profileDTO.Description);
 
         await repositoryProvider.ProfileRepository.SaveAsync(profile);
+    }
+
+    public async Task<IProfileService.GetProfileDTO> GetProfileAsync(Guid userId)
+    {
+        var profile = await repositoryProvider.ProfileRepository.GetByUserIdAsync(userId) ?? 
+                      throw new Exception("Профиль не найден");
+        
+        return new IProfileService.GetProfileDTO(profile.FirstName, profile.LastName, profile.Description);
     }
 }
