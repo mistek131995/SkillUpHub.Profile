@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SkillUpHub.Profile.API.Services;
+using SkillUpHub.Profile.Contract.Providers;
 using SkillUpHub.Profile.Infrastructure.Contexts;
+using SkillUpHub.Profile.Infrastructure.Providers;
+using IServiceProvider = System.IServiceProvider;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +48,9 @@ builder.Services.AddAuthentication(option =>
 
 builder.Services.AddDbContext<PGContext>(option => 
     option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IRepositoryProvider, RepositoryProvider>();
+builder.Services.AddScoped<IServiceProvider, ServiceProvider>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddGrpc();
