@@ -1,9 +1,13 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SkillUpHub.Profile.API.Services;
+using SkillUpHub.Profile.Infrastructure.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region Настройка аутентификации
 
 builder.Services.AddAuthentication(option =>
 {
@@ -37,6 +41,11 @@ builder.Services.AddAuthentication(option =>
     };
 });
 
+#endregion
+
+builder.Services.AddDbContext<PGContext>(option => 
+    option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddAuthorization();
 builder.Services.AddGrpc();
 
@@ -50,6 +59,13 @@ builder.Services.AddCors(x => x.AddPolicy("CORS", builder =>
 }));
 
 var app = builder.Build();
+
+// Автоматическое применение миграций при старте приложения
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<PGContext>();
+    dbContext.Database.Migrate();
+}
 
 // Включаем аутентификацию и авторизацию
 app.UseAuthentication();
