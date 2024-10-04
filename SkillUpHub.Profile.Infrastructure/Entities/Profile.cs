@@ -7,6 +7,7 @@ public class Profile
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
+    public Guid UserId { get; set; }
     [MaxLength(50)]
     public string FirstName { get; set; } = string.Empty;
     [MaxLength(50)] 

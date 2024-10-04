@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SkillUpHub.Profile.Infrastructure.Contexts;
@@ -11,9 +12,11 @@ using SkillUpHub.Profile.Infrastructure.Contexts;
 namespace SkillUpHub.Profile.Infrastructure.Migrations
 {
     [DbContext(typeof(PGContext))]
-    partial class PGContextModelSnapshot : ModelSnapshot
+    [Migration("20241004144649_UserIdInProfileTable")]
+    partial class UserIdInProfileTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
