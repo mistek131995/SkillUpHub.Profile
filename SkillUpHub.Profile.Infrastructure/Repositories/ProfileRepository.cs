@@ -7,7 +7,7 @@ namespace SkillUpHub.Profile.Infrastructure.Repositories;
 
 public class ProfileRepository(PGContext context) : IProfileRepository
 {
-    public async Task<Contract.Models.Profile> GetByUserIdAsync(Guid userId)
+    public async Task<Contract.Models.Profile?> GetByUserIdAsync(Guid userId)
     {
         var mapper = new ProfileMapper();
         var profile = await context.Profiles.FirstOrDefaultAsync(x => x.UserId == userId);
