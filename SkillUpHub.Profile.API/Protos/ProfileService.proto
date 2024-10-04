@@ -6,6 +6,7 @@ package ProfileService;
 
 service ProfileService {
   rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+  rpc SaveProfile(SaveProfileRequest) returns (SaveProfileResponse);
 }
 
 message GetProfileRequest{
@@ -14,4 +15,14 @@ message GetProfileRequest{
 
 message GetProfileResponse{
   string FirstName = 1;
+}
+
+message SaveProfileRequest{
+  string FirstName = 1;
+  string LastName = 2;
+  string Description = 3;
+}
+
+message SaveProfileResponse{
+  bool IsSuccess = 1;
 }
