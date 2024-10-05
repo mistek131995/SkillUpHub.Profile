@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SkillHub.Profile.Application.Handlers;
-using SkillHub.Profile.Application.Interfaces;
 using SkillUpHub.Profile.API.Middlewares;
 using SkillUpHub.Profile.API.Services;
 using SkillUpHub.Profile.Contract.Providers;

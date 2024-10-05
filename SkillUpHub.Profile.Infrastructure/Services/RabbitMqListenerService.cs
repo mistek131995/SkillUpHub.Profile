@@ -6,8 +6,7 @@ namespace SkillUpHub.Profile.Infrastructure.Services;
 
 public class RabbitMqListenerService(
     IMessageBusClient messageBusClient, 
-    IServiceProvider serviceProvider, 
-    IRabbitMqMessageHandler rabbitMqMessageHandler) : BackgroundService
+    IServiceProvider serviceProvider) : BackgroundService
 {
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -18,6 +17,7 @@ public class RabbitMqListenerService(
     private async void HandleCreateUserMessage(Guid userId)
     {
         using var scope = serviceProvider.CreateScope();
+        var rabbitMqMessageHandler = scope.ServiceProvider.GetService<IRabbitMqMessageHandler>()!;
         await rabbitMqMessageHandler.CreateDefaultUserProfileAsync(userId);
     }
 }
