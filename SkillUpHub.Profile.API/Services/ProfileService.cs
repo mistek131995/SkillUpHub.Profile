@@ -2,8 +2,8 @@ using System.Security.Claims;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
-using SkillUpHub.Profile.Contract.Services;
-using IServiceProvider = SkillUpHub.Profile.Contract.Providers.IServiceProvider;
+using SkillHub.Profile.Application.Interfaces;
+using IServiceProvider = SkillHub.Profile.Application.Interfaces.IServiceProvider;
 
 namespace SkillUpHub.Profile.API.Services;
 

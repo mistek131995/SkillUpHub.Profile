@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SkillHub.Profile.Application.Interfaces;
 using SkillHub.Profile.Application.Services;
-using SkillUpHub.Profile.Contract.Services;
-using CServiceProvider = SkillUpHub.Profile.Contract.Providers.IServiceProvider;
+using IServiceProvider = SkillHub.Profile.Application.Interfaces.IServiceProvider;
 
 namespace SkillHub.Profile.Application.Providers;
 
-public class ServiceProvider(IServiceProvider serviceProvider) : CServiceProvider
+public class ServiceProvider(System.IServiceProvider serviceProvider) : IServiceProvider
 {
     private readonly Dictionary<Type, IBaseService> _services = new();
     

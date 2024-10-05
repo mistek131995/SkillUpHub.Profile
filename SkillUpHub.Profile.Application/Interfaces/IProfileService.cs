@@ -1,4 +1,4 @@
-﻿namespace SkillUpHub.Profile.Contract.Services;
+﻿namespace SkillHub.Profile.Application.Interfaces;
 
 public interface IProfileService : IBaseService
 {

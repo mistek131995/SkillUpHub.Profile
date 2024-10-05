@@ -1,5 +1,5 @@
-﻿using SkillUpHub.Profile.Contract.Providers;
-using SkillUpHub.Profile.Contract.Services;
+﻿using SkillHub.Profile.Application.Interfaces;
+using SkillUpHub.Profile.Contract.Providers;
 
 namespace SkillHub.Profile.Application.Services;
 
@@ -9,9 +9,10 @@ public class ProfileService(IRepositoryProvider repositoryProvider) : IProfileSe
     {
         var profile = await repositoryProvider.ProfileRepository.GetByUserIdAsync(profileDTO.UserId) ??
                       new SkillUpHub.Profile.Contract.Models.Profile(
-                          profileDTO.FirstName, 
-                          profileDTO.LastName,
-                          profileDTO.Description);
+                          userId: profileDTO.UserId,
+                          firstName: profileDTO.FirstName, 
+                          lastName: profileDTO.LastName,
+                          description: profileDTO.Description);
 
         await repositoryProvider.ProfileRepository.SaveAsync(profile);
     }

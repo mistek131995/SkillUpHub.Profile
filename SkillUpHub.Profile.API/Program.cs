@@ -2,11 +2,16 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SkillHub.Profile.Application.Handlers;
+using SkillHub.Profile.Application.Interfaces;
 using SkillUpHub.Profile.API.Middlewares;
 using SkillUpHub.Profile.API.Services;
 using SkillUpHub.Profile.Contract.Providers;
+using SkillUpHub.Profile.Infrastructure.Clients;
 using SkillUpHub.Profile.Infrastructure.Contexts;
+using SkillUpHub.Profile.Infrastructure.Interfaces;
 using SkillUpHub.Profile.Infrastructure.Providers;
+using SkillUpHub.Profile.Infrastructure.Services;
 using IServiceProvider = System.IServiceProvider;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,6 +57,12 @@ builder.Services.AddDbContext<PGContext>(option =>
 
 builder.Services.AddScoped<IRepositoryProvider, RepositoryProvider>();
 builder.Services.AddScoped<IServiceProvider, ServiceProvider>();
+
+builder.Services.AddSingleton<IMessageBusClient, RabbitMqClient>(x =>
+    new RabbitMqClient(builder.Configuration.GetSection("RabbitMqHost").Value));
+builder.Services.AddScoped<IRabbitMqMessageHandler, RabbitMqMessageHandler>();
+
+builder.Services.AddHostedService<RabbitMqListenerService>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddGrpc(options =>
