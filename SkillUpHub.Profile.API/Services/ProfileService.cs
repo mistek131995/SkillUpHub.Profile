@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using SkillHub.Profile.Application.Interfaces;
@@ -10,7 +9,7 @@ namespace SkillUpHub.Profile.API.Services;
 public class ProfileService(IServiceProvider serviceProvider) : Profile.ProfileService.ProfileServiceBase
 {
     [Authorize]
-    public override async Task<GetProfileResponse> GetProfile(Empty empty, ServerCallContext context)
+    public override async Task<GetProfileResponse> GetProfile(GetProfileRequest request, ServerCallContext context)
     {
         var httpContext = context.GetHttpContext();
         var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? 

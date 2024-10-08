@@ -11,7 +11,8 @@ using SkillUpHub.Profile.Infrastructure.Contexts;
 using SkillUpHub.Profile.Infrastructure.Interfaces;
 using SkillUpHub.Profile.Infrastructure.Providers;
 using SkillUpHub.Profile.Infrastructure.Services;
-using IServiceProvider = System.IServiceProvider;
+using IServiceProvider = SkillHub.Profile.Application.Interfaces.IServiceProvider;
+using ServiceProvider = SkillHub.Profile.Application.Providers.ServiceProvider;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,7 +70,7 @@ builder.Services.AddGrpc(options =>
     options.Interceptors.Add<GrpcExceptionInterceptor>(); // Регистрируем Interceptor
 });
 
-builder.Services.AddCors(x => x.AddPolicy("CORS", builder =>
+builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 {
     builder.WithOrigins("http://localhost:3000")
         .AllowAnyMethod()
@@ -87,12 +88,15 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.Migrate();
 }
 
-// Включаем аутентификацию и авторизацию
+// Включаем CORS до авторизации
+app.UseCors("AllowAll");
+
+// Аутентификация и авторизация
 app.UseAuthentication();
 app.UseAuthorization();
 
+// gRPC Web и Endpoints
 app.UseGrpcWeb();
-app.UseCors();
-app.MapGrpcService<ProfileService>().EnableGrpcWeb().RequireCors("CORS");
+app.MapGrpcService<ProfileService>().EnableGrpcWeb().RequireCors("AllowAll");
 
 app.Run();

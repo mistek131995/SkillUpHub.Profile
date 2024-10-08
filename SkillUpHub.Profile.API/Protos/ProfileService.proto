@@ -1,14 +1,15 @@
 syntax = "proto3";
-import "google/protobuf/empty.proto";
 
 option csharp_namespace = "SkillUpHub.Profile";
 
 package ProfileService;
 
 service ProfileService {
-  rpc GetProfile(google.protobuf.Empty) returns (GetProfileResponse);
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
   rpc SaveProfile(SaveProfileRequest) returns (SaveProfileResponse);
 }
+
+message GetProfileRequest{}
 
 message GetProfileResponse{
   string FirstName = 1;
