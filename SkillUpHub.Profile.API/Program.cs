@@ -2,19 +2,13 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SkillHub.Profile.Application.Handlers;
-using SkillUpHub.Profile.API.Middlewares;
-using SkillUpHub.Profile.API.Services;
-using SkillUpHub.Profile.Contract.Providers;
-using SkillUpHub.Profile.Infrastructure.Clients;
-using SkillUpHub.Profile.Infrastructure.Contexts;
-using SkillUpHub.Profile.Infrastructure.Interfaces;
-using SkillUpHub.Profile.Infrastructure.Providers;
-using SkillUpHub.Profile.Infrastructure.Services;
-using IServiceProvider = SkillHub.Profile.Application.Interfaces.IServiceProvider;
-using ServiceProvider = SkillHub.Profile.Application.Providers.ServiceProvider;
+using SkillUpHub.Command.Application;
+using SkillUpHub.Command.Infrastructure.Contexts;
+using SkillUpHub.Profile.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCommands(builder.Configuration);
 
 #region Настройка аутентификации
 
@@ -52,22 +46,12 @@ builder.Services.AddAuthentication(option =>
 
 #endregion
 
-builder.Services.AddDbContext<PGContext>(option => 
-    option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddScoped<IRepositoryProvider, RepositoryProvider>();
-builder.Services.AddScoped<IServiceProvider, ServiceProvider>();
-
-builder.Services.AddSingleton<IMessageBusClient, RabbitMqClient>(x =>
-    new RabbitMqClient(builder.Configuration.GetSection("RabbitMqHost").Value));
-builder.Services.AddScoped<IRabbitMqMessageHandler, RabbitMqMessageHandler>();
-
-builder.Services.AddHostedService<RabbitMqListenerService>();
-
 builder.Services.AddAuthorization();
-builder.Services.AddGrpc(options =>
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
 {
-    options.Interceptors.Add<GrpcExceptionInterceptor>(); // Регистрируем Interceptor
+    c.CustomSchemaIds(type => type.FullName); // Используем полное имя типа
 });
 
 builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
@@ -75,11 +59,16 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
     builder.WithOrigins("http://localhost:3000")
         .AllowAnyMethod()
         .AllowAnyHeader()
-        .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding")
         .AllowCredentials();
 }));
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 // Автоматическое применение миграций при старте приложения
 using (var scope = app.Services.CreateScope())
@@ -95,8 +84,6 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
-// gRPC Web и Endpoints
-app.UseGrpcWeb();
-app.MapGrpcService<ProfileService>().EnableGrpcWeb().RequireCors("AllowAll");
+app.RegisterRoutes();
 
 app.Run();
