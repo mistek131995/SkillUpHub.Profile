@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SkillUpHub.Command.Application\SkillUpHub.Command.Application.csproj" />
+      <ProjectReference Include="..\SkillUpHub.Query.Application\SkillUpHub.Query.Application.csproj" />
     </ItemGroup>
 
 </Project>

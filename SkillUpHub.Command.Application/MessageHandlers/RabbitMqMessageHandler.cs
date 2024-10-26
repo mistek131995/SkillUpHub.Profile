@@ -1,7 +1,7 @@
 ﻿using SkillUpHub.Command.Infrastructure.Interfaces;
 using SkillUpHub.Profile.Contract.Providers;
 
-namespace SkillUpHub.Command.Application.Handlers;
+namespace SkillUpHub.Command.Application.MessageHandlers;
 
 public class RabbitMqMessageHandler(IRepositoryProvider repositoryProvider) : IRabbitMqMessageHandler
 {

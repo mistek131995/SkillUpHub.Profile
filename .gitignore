@@ -7,5 +7,7 @@
 /SkillUpHub.Command.Contract/obj/*
 /SkillUpHub.Command.Infrastructure/obj/*
 /SkillUpHub.Command.Infrastructure/bin/*
+/SkillUpHub.Query.Application/bin/*
+/SkillUpHub.Query.Application/obj/*
 /.vs/*
 /.idea/*
