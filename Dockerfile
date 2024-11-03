@@ -7,9 +7,10 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["SkillUpHub.Profile/SkillUpHub.Profile.API/SkillUpHub.Profile.API.csproj", "SkillUpHub.Profile.API/"]
-COPY ["SkillUpHub.Profile/SkillUpHub.Profile.Application/SkillUpHub.Profile.Application.csproj", "SkillUpHub.Profile.Application/"]
-COPY ["SkillUpHub.Profile/SkillUpHub.Profile.Contract/SkillUpHub.Profile.Contract.csproj", "SkillUpHub.Profile.Contract/"]
-COPY ["SkillUpHub.Profile/SkillUpHub.Profile.Infrastructure/SkillUpHub.Profile.Infrastructure.csproj", "SkillUpHub.Profile.Infrastructure/"]
+COPY ["SkillUpHub.Profile/SkillUpHub.Command.Application/SkillUpHub.Command.Application.csproj", "SkillUpHub.Command.Application/"]
+COPY ["SkillUpHub.Profile/SkillUpHub.Command.Contract/SkillUpHub.Command.Contract.csproj", "SkillUpHub.Command.Contract/"]
+COPY ["SkillUpHub.Profile/SkillUpHub.Command.Infrastructure/SkillUpHub.Command.Infrastructure.csproj", "SkillUpHub.Command.Infrastructure/"]
+COPY ["SkillUpHub.Profile/SkillUpHub.Query.Application/SkillUpHub.Query.Application.csproj", "SkillUpHub.Query.Application/"]
 RUN dotnet restore "SkillUpHub.Profile.API/SkillUpHub.Profile.API.csproj"
 COPY ./SkillUpHub.Profile/ .
 WORKDIR "/src/SkillUpHub.Profile.API"

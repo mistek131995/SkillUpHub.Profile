@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using SkillUpHub.Command.Application;
 using SkillUpHub.Command.Infrastructure.Contexts;
 using SkillUpHub.Profile.API.Extensions;
+using SkillUpHub.Profile.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,5 +86,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.RegisterRoutes();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.Run();

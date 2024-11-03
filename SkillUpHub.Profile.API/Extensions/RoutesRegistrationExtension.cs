@@ -11,7 +11,7 @@ public static class RoutesRegistrationExtension
 
         foreach (var type in apiTypes)
         {
-            var apiInstance = ActivatorUtilities.CreateInstance(app.Services, type) as IApi;
+            var apiInstance = Activator.CreateInstance(type) as IApi;
 
             apiInstance?.RegisterRoutes(app);
         }

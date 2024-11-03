@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SkillUpHub.Command.Application.Behaviors;
 using SkillUpHub.Command.Application.MessageHandlers;
 using SkillUpHub.Command.Infrastructure.Clients;
 using SkillUpHub.Command.Infrastructure.Contexts;
@@ -17,10 +20,9 @@ public static class CommandService
     {
         services.AddDbContext<PGContext>(option => 
             option.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(typeof(CommandService).Assembly);
-        });
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CommandService).Assembly));
+        services.AddValidatorsFromAssembly(typeof(CommandService).Assembly);
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         
         services.AddScoped<IRepositoryProvider, RepositoryProvider>();
 
