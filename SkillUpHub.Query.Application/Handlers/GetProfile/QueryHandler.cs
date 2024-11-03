@@ -11,16 +11,16 @@ public class QueryHandler(IDbConnection connection, IHttpContextAccessor httpCon
     {
         var userId = httpContextAccessor.HttpContext!.User.Claims.FirstOrDefault(x => x.Type == "Id")!.Value;
         
-        var sql = @"
-            SELECT
-                p.""FirstName"",
-                p.""LastName"",
-                p.""Description""
-            FROM ""Profiles"" AS p
-            WHERE p.""UserId"" = @UserId;
-        ";
+        const string sql = """
+                               SELECT
+                                   p."FirstName",
+                                   p."LastName",
+                                   p."Description"
+                               FROM "Profiles" AS p
+                               WHERE p."UserId" = @UserId;
+                           """;
         
         
-        return (await connection.QuerySingleOrDefaultAsync<ViewModel>(sql, new { UserId = userId }))!;
+        return (await connection.QuerySingleOrDefaultAsync<ViewModel>(sql, new { UserId = Guid.Parse(userId) }))!;
     }
 }

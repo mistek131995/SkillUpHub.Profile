@@ -6,10 +6,12 @@ using SkillUpHub.Command.Application;
 using SkillUpHub.Command.Infrastructure.Contexts;
 using SkillUpHub.Profile.API.Extensions;
 using SkillUpHub.Profile.API.Middlewares;
+using SkillUpHub.Query.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCommands(builder.Configuration);
+builder.Services.AddQueryServices(builder.Configuration);
 
 #region Настройка аутентификации
 
@@ -57,7 +59,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 {
-    builder.WithOrigins("http://localhost:3000")
+    builder.WithOrigins("http://localhost:5173")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
