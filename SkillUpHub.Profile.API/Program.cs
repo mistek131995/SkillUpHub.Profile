@@ -63,6 +63,8 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
         .AllowCredentials();
 }));
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
