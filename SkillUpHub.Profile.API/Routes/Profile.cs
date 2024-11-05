@@ -8,6 +8,12 @@ public class Profile : IApi
 {
     public void RegisterRoutes(WebApplication app)
     {
-        app.MapGet("/GetProfile", async (IMediator mediator) => await mediator.Send(new GetProfile.Query())).RequireAuthorization();
+        app.MapGet("/GetProfile", async (Guid? userId, IMediator mediator, HttpContext httpContext) =>
+        {
+            var query = new GetProfile.Query();
+            query.UserId = userId ?? Guid.Parse(httpContext.User.Claims.FirstOrDefault(x => x.Type == "Id")!.Value);
+            
+            return await mediator.Send(query);
+        }).RequireAuthorization();
     }
 }

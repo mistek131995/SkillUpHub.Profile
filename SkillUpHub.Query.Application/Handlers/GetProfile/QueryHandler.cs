@@ -5,12 +5,10 @@ using Microsoft.AspNetCore.Http;
 
 namespace SkillUpHub.Query.Application.Handlers.GetProfile;
 
-public class QueryHandler(IDbConnection connection, IHttpContextAccessor httpContextAccessor) : IRequestHandler<Query, ViewModel>
+public class QueryHandler(IDbConnection connection) : IRequestHandler<Query, ViewModel>
 {
     public async Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
     {
-        var userId = httpContextAccessor.HttpContext!.User.Claims.FirstOrDefault(x => x.Type == "Id")!.Value;
-        
         const string sql = """
                                SELECT
                                    p."FirstName",
@@ -21,6 +19,6 @@ public class QueryHandler(IDbConnection connection, IHttpContextAccessor httpCon
                            """;
         
         
-        return (await connection.QuerySingleOrDefaultAsync<ViewModel>(sql, new { UserId = Guid.Parse(userId) }))!;
+        return (await connection.QuerySingleOrDefaultAsync<ViewModel>(sql, new { UserId = request.UserId }))!;
     }
 }
