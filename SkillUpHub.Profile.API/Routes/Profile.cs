@@ -10,9 +10,11 @@ public class Profile : IApi
     {
         app.MapGet("/GetProfile", async (Guid? userId, IMediator mediator, HttpContext httpContext) =>
         {
-            var query = new GetProfile.Query();
-            query.UserId = userId ?? Guid.Parse(httpContext.User.Claims.FirstOrDefault(x => x.Type == "Id")!.Value);
-            
+            var query = new GetProfile.Query
+            {
+                UserId = userId ?? Guid.Parse(httpContext.User.Claims.FirstOrDefault(x => x.Type == "Id")!.Value)
+            };
+
             return await mediator.Send(query);
         }).RequireAuthorization();
     }

@@ -1,16 +1,21 @@
-﻿using SkillUpHub.Command.Infrastructure.Interfaces;
-using SkillUpHub.Profile.Contract.Providers;
+﻿using MediatR;
+using SkillUpHub.Command.Infrastructure.Interfaces;
+using SaveProfile = SkillUpHub.Command.Application.CommandHandlers.SaveProfile;
 
 namespace SkillUpHub.Command.Application.MessageHandlers;
 
-public class RabbitMqMessageHandler(IRepositoryProvider repositoryProvider) : IRabbitMqMessageHandler
+public class RabbitMqMessageHandler(IMediator mediator) : IRabbitMqMessageHandler
 {
     public async Task CreateDefaultUserProfileAsync(Guid guid)
     {
-        await repositoryProvider.ProfileRepository.SaveAsync(new SkillUpHub.Command.Contract.Models.Profile(
-            userId: guid,
-            firstName: "UserName",
-            lastName: "UserName",
-            description: String.Empty));
+        await mediator.Send(new SaveProfile.Command()
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            BirthDate = DateTime.Now.AddYears(-20),
+            CountryId = 0,
+            Description = "",
+            UserId = guid
+        });
     }
 }
