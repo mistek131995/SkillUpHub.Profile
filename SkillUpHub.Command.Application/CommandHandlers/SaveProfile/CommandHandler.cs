@@ -14,20 +14,24 @@ public class CommandHandler(IRepositoryProvider repositoryProvider, IMessageBusC
         if (profile == null)
         {
             profile = new Contract.Models.Profile(
-                id: UUIDNext.Uuid.NewDatabaseFriendly(Database.PostgreSql),
+                id: Uuid.NewDatabaseFriendly(Database.PostgreSql),
                 userId: request.UserId,
                 firstName: request.FirstName,
                 lastName: request.LastName,
                 description: "");
+            
+            await repositoryProvider.ProfileRepository.SaveAsync(profile);
+            messageBusClient.PublishMessage(request.UserId, routingKey: "create-profile-success");
         }
         else
         {
             profile.FirstName = request.FirstName;
             profile.LastName = request.LastName;
             profile.Description = request.Description;
+
+            await repositoryProvider.ProfileRepository.SaveAsync(profile);
+            messageBusClient.PublishMessage(request.UserId, routingKey: "update-profile-success");
         }
-        
-        await repositoryProvider.ProfileRepository.SaveAsync(profile);
         
         return Unit.Value;
     }

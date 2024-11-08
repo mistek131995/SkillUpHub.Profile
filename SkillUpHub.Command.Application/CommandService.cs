@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SkillUpHub.Command.Application.Behaviors;
 using SkillUpHub.Command.Application.MessageHandlers;
+using SkillUpHub.Command.Contract.Models;
 using SkillUpHub.Command.Infrastructure.Clients;
 using SkillUpHub.Command.Infrastructure.Contexts;
 using SkillUpHub.Command.Infrastructure.Interfaces;
@@ -18,6 +19,8 @@ public static class CommandService
 {
     public static IServiceCollection AddCommands(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMqSettings"));
+        
         services.AddDbContext<PGContext>(option => 
             option.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CommandService).Assembly));
@@ -26,8 +29,8 @@ public static class CommandService
         
         services.AddScoped<IRepositoryProvider, RepositoryProvider>();
 
-        services.AddSingleton<IMessageBusClient, RabbitMqClient>(x =>
-            new RabbitMqClient(configuration.GetSection("RabbitMqHost").Value!));
+        services.AddSingleton<IMessageBusClient, RabbitMqClient>();
+        
         services.AddScoped<IRabbitMqMessageHandler, RabbitMqMessageHandler>();
 
         services.AddHostedService<RabbitMqListenerService>();

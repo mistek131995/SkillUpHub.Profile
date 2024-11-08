@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SkillUpHub.Command.Application;
 using SkillUpHub.Command.Infrastructure.Contexts;
+using SkillUpHub.Command.Infrastructure.Interfaces;
 using SkillUpHub.Profile.API.Extensions;
 using SkillUpHub.Profile.API.Middlewares;
 using SkillUpHub.Query.Application;
@@ -91,5 +92,8 @@ app.UseAuthorization();
 
 app.RegisterRoutes();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+var rabbitMqService = app.Services.GetService<IMessageBusClient>();
+rabbitMqService!.Initialize();
 
 app.Run();
