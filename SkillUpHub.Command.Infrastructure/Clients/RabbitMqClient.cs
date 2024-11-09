@@ -14,6 +14,7 @@ public class RabbitMqClient : IMessageBusClient
     private readonly IConnection _connection;
     private readonly IModel _channel;
     private readonly IOptions<RabbitMqSettings> _options;
+    
     public RabbitMqClient(IOptions<RabbitMqSettings> options)
     {
         var factory = new ConnectionFactory()
@@ -21,16 +22,11 @@ public class RabbitMqClient : IMessageBusClient
             HostName = options.Value.Host
         };
         
-        
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
         _options = options;
     }
-
-    /// <summary>
-    /// Метод инициализации очередей и обменников
-    /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
+    
     public void Initialize()
     {
         if (_options.Value.Exchanges.Count > 0)
@@ -59,12 +55,12 @@ public class RabbitMqClient : IMessageBusClient
         }
     }
 
-    public void PublishMessage<T>(T message, string routingKey)
+    public void PublishMessage<T>(T message, string exchange, string routingKey)
     {
         var jsonMessage = JsonConvert.SerializeObject(message);
         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
-        _channel.BasicPublish(exchange: "",
+        _channel.BasicPublish(exchange: exchange,
             routingKey: routingKey,
             basicProperties: null,
             body: body);

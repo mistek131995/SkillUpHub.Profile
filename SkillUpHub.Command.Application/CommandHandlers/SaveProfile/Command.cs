@@ -5,6 +5,7 @@ namespace SkillUpHub.Command.Application.CommandHandlers.SaveProfile;
 public class Command : IRequest<Unit>
 {
     public Guid UserId { get; set; }
+    public Guid SessionId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Description { get; set; }

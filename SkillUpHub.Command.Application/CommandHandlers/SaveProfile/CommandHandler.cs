@@ -1,11 +1,13 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Options;
+using SkillUpHub.Command.Contract.Models;
 using SkillUpHub.Command.Infrastructure.Interfaces;
 using SkillUpHub.Profile.Contract.Providers;
 using UUIDNext;
 
 namespace SkillUpHub.Command.Application.CommandHandlers.SaveProfile;
 
-public class CommandHandler(IRepositoryProvider repositoryProvider, IMessageBusClient messageBusClient) : IRequestHandler<Command, Unit>
+public class CommandHandler(IRepositoryProvider repositoryProvider, IMessageBusClient messageBusClient, IOptions<RabbitMqSettings> options) : IRequestHandler<Command, Unit>
 {
     public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
     {
@@ -13,24 +15,44 @@ public class CommandHandler(IRepositoryProvider repositoryProvider, IMessageBusC
 
         if (profile == null)
         {
-            profile = new Contract.Models.Profile(
-                id: Uuid.NewDatabaseFriendly(Database.PostgreSql),
-                userId: request.UserId,
-                firstName: request.FirstName,
-                lastName: request.LastName,
-                description: "");
-            
-            await repositoryProvider.ProfileRepository.SaveAsync(profile);
-            messageBusClient.PublishMessage(request.UserId, routingKey: "create-profile-success");
+            try
+            {
+                profile = new Contract.Models.Profile(
+                    id: Uuid.NewDatabaseFriendly(Database.PostgreSql),
+                    userId: request.UserId,
+                    firstName: request.FirstName,
+                    lastName: request.LastName,
+                    description: "");
+
+                await repositoryProvider.ProfileRepository.SaveAsync(profile);
+                messageBusClient.PublishMessage(request.UserId, exchange: "", routingKey: "create-profile-success");
+            }
+            catch (Exception ex)
+            {
+                var errorEndpoint = options.Value.Exchanges.Find(x => x.Id == "create-account-failure");
+                messageBusClient.PublishMessage((userId: request.UserId, sessionId: request.SessionId), exchange: errorEndpoint.Name, routingKey: "");
+                
+                messageBusClient.PublishErrorMessage(ex);
+            }
         }
         else
         {
-            profile.FirstName = request.FirstName;
-            profile.LastName = request.LastName;
-            profile.Description = request.Description;
+            try
+            {
+                profile.FirstName = request.FirstName;
+                profile.LastName = request.LastName;
+                profile.Description = request.Description;
 
-            await repositoryProvider.ProfileRepository.SaveAsync(profile);
-            messageBusClient.PublishMessage(request.UserId, routingKey: "update-profile-success");
+                await repositoryProvider.ProfileRepository.SaveAsync(profile);
+                messageBusClient.PublishMessage(request.UserId, exchange: "", routingKey: "update-profile-success");
+            }
+            catch (Exception ex)
+            {
+                var errorEndpoint = options.Value.Queues.Find(x => x.Id == "update-profile-failure");
+                messageBusClient.PublishMessage((userId: request.UserId, sessionId: request.SessionId), exchange: "", routingKey: errorEndpoint.Key);
+                
+                messageBusClient.PublishErrorMessage(ex);
+            }
         }
         
         return Unit.Value;
