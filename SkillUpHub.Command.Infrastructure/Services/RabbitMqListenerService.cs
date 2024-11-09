@@ -10,11 +10,11 @@ public class RabbitMqListenerService(
 {
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        messageBusClient.Subscribe<Guid>("createUser", HandleCreateUserMessage);
+        messageBusClient.Subscribe<Guid>("createUser", async (Guid userId) => await HandleCreateUserMessage(userId));
         return Task.CompletedTask;
     }
 
-    private async void HandleCreateUserMessage(Guid userId)
+    private async Task HandleCreateUserMessage(Guid userId)
     {
         using var scope = serviceProvider.CreateScope();
         var rabbitMqMessageHandler = scope.ServiceProvider.GetService<IRabbitMqMessageHandler>()!;

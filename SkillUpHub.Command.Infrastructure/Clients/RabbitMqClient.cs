@@ -78,9 +78,8 @@ public class RabbitMqClient : IMessageBusClient
             body: body);
     }
 
-    public void Subscribe<T>(string queueName, Action<T> onMessageReceived)
+    public void Subscribe<T>(string queueName, Func<T, Task> onMessageReceived)
     {
-        _channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
         var consumer = new EventingBasicConsumer(_channel);
         consumer.Received += (model, ea) =>
         {
