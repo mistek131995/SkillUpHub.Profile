@@ -2,5 +2,5 @@
 
 public interface IRabbitMqMessageHandler
 {
-    Task CreateDefaultUserProfileAsync(Guid guid);
+    Task CreateDefaultUserProfileAsync(Guid userId, Guid sessionId);
 }

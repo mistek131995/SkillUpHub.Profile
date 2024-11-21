@@ -6,7 +6,7 @@ namespace SkillUpHub.Command.Application.MessageHandlers;
 
 public class RabbitMqMessageHandler(IMediator mediator) : IRabbitMqMessageHandler
 {
-    public async Task CreateDefaultUserProfileAsync(Guid guid)
+    public async Task CreateDefaultUserProfileAsync(Guid userId, Guid sessionId)
     {
         await mediator.Send(new SaveProfile.Command()
         {
@@ -15,7 +15,8 @@ public class RabbitMqMessageHandler(IMediator mediator) : IRabbitMqMessageHandle
             BirthDate = DateTime.Now.AddYears(-20),
             CountryId = 0,
             Description = "",
-            UserId = guid
+            UserId = userId,
+            SessionId = sessionId
         });
     }
 }
