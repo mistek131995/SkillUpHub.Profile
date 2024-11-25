@@ -12,14 +12,12 @@ public class RabbitMqListenerService(
     
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        messageBusClient.Subscribe("createUser", async (CreateUserMessage message) => await HandleCreateUserMessage(message.UserId, message.SessionId));
-        return Task.CompletedTask;
-    }
-
-    private async Task HandleCreateUserMessage(Guid userId, Guid sessionId)
-    {
         using var scope = serviceProvider.CreateScope();
         var rabbitMqMessageHandler = scope.ServiceProvider.GetService<IRabbitMqMessageHandler>()!;
-        await rabbitMqMessageHandler.CreateDefaultUserProfileAsync(userId, sessionId);
+        
+        messageBusClient.Subscribe("create-account-complete", async (CreateUserMessage message) 
+            => await rabbitMqMessageHandler.CreateDefaultUserProfileAsync(message.UserId, message.SessionId));
+        
+        return Task.CompletedTask;
     }
 }
