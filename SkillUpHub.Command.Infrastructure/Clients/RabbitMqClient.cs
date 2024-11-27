@@ -29,7 +29,7 @@ public class RabbitMqClient : IMessageBusClient
     
     public void Initialize()
     {
-        if (_options.Value.Exchanges.Count > 0)
+        if (_options.Value.Exchanges is {Count: > 0})
         {
             foreach (var exchange in _options.Value.Exchanges)
             {
@@ -46,7 +46,7 @@ public class RabbitMqClient : IMessageBusClient
             }
         }
 
-        if (_options.Value.Queues.Count > 0)
+        if (_options.Value.Queues is {Count: > 0})
         {
             foreach (var queue in _options.Value.Queues)
             {
