@@ -7,7 +7,7 @@ using UUIDNext;
 
 namespace SkillUpHub.Command.Application.CommandHandlers.SaveProfile;
 
-public class CommandHandler(IRepositoryProvider repositoryProvider, IMessageBusClient messageBusClient, IOptions<RabbitMqSettings> options) : IRequestHandler<Command, Unit>
+public class CommandHandler(IRepositoryProvider repositoryProvider, IMessageBusClient messageBusClient) : IRequestHandler<Command, Unit>
 {
     public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
     {
@@ -44,30 +44,31 @@ public class CommandHandler(IRepositoryProvider repositoryProvider, IMessageBusC
             }
             catch (Exception ex)
             {
-                var errorEndpoint = options.Value.Exchanges.Find(x => x.Id == "create-account-failure");
-                messageBusClient.PublishMessage((userId: request.UserId, sessionId: request.SessionId), exchange: errorEndpoint.Name, routingKey: "");
+                messageBusClient.PublishMessage(new
+                {
+                    UserId = request.UserId, 
+                    SessionId = request.SessionId
+                }, exchange: "create-user", routingKey: "create-user.rollback-account");
+                
+                messageBusClient.PublishMessage(new
+                {
+                    UserId = request.SessionId,
+                    Message = "Ошибка создания профиля аккаунта, попробуйте позднее.",
+                    Method = "show-toast-notification",
+                    Type = NotificationType.Error
+                }, exchange: "notification", routingKey: "notification.toast");
                 
                 messageBusClient.PublishErrorMessage(ex);
             }
         }
         else
         {
-            try
-            {
-                profile.FirstName = request.FirstName;
-                profile.LastName = request.LastName;
-                profile.Description = request.Description;
+            profile.FirstName = request.FirstName;
+            profile.LastName = request.LastName;
+            profile.Description = request.Description;
 
-                await repositoryProvider.ProfileRepository.SaveAsync(profile);
-                messageBusClient.PublishMessage(request.UserId, exchange: "", routingKey: "update-profile-success");
-            }
-            catch (Exception ex)
-            {
-                var errorEndpoint = options.Value.Queues.Find(x => x.Id == "update-profile-failure");
-                messageBusClient.PublishMessage((userId: request.UserId, sessionId: request.SessionId), exchange: "", routingKey: errorEndpoint.Key);
-                
-                messageBusClient.PublishErrorMessage(ex);
-            }
+            await repositoryProvider.ProfileRepository.SaveAsync(profile);
+            messageBusClient.PublishMessage(request.UserId, exchange: "", routingKey: "update-profile-success");
         }
         
         return Unit.Value;

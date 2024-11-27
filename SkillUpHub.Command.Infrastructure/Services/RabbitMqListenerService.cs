@@ -15,7 +15,7 @@ public class RabbitMqListenerService(
         using var scope = serviceProvider.CreateScope();
         var rabbitMqMessageHandler = scope.ServiceProvider.GetService<IRabbitMqMessageHandler>()!;
         
-        messageBusClient.Subscribe("create-account-complete", async (CreateUserMessage message) 
+        messageBusClient.Subscribe("create-user.account-create-success", async (CreateUserMessage message) 
             => await rabbitMqMessageHandler.CreateDefaultUserProfileAsync(message.UserId, message.SessionId));
         
         return Task.CompletedTask;
