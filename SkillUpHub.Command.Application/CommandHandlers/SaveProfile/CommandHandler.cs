@@ -28,7 +28,7 @@ public class CommandHandler(IRepositoryProvider repositoryProvider, IMessageBusC
                 messageBusClient.PublishMessage(new
                 {
                     UserId = request.SessionId,
-                    Message = "Аккаунт успешно создан. На электронную поту отправлено письмо с инструкцией по активации аккаунта.",
+                    Message = "Аккаунт успешно создан. На электронную почту отправлено письмо с инструкцией по активации аккаунта.",
                     Method = "show-toast-notification",
                     Type = NotificationType.Success
                 }, exchange: "notification", routingKey: "notification.toast");
@@ -36,7 +36,7 @@ public class CommandHandler(IRepositoryProvider repositoryProvider, IMessageBusC
                 messageBusClient.PublishMessage(new
                 {
                     UserId = request.SessionId,
-                    Message = "Аккаунт успешно создан. На электронную поту отправлено письмо с инструкцией по активации аккаунта.",
+                    Message = "Аккаунт успешно создан. На электронную почту отправлено письмо с инструкцией по активации аккаунта.",
                     Method = "register-action",
                     Type = ActionType.Success
                 }, exchange: "notification", routingKey: "notification.action");
