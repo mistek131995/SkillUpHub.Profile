@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Options;
 using SkillUpHub.Command.Contract.Models;
 using SkillUpHub.Command.Infrastructure.Interfaces;
 using SkillUpHub.Profile.Contract.Providers;
@@ -46,8 +45,8 @@ public class CommandHandler(IRepositoryProvider repositoryProvider, IMessageBusC
             {
                 messageBusClient.PublishMessage(new
                 {
-                    UserId = request.UserId, 
-                    SessionId = request.SessionId
+                    request.UserId, 
+                    request.SessionId
                 }, exchange: "create-user", routingKey: "create-user.rollback-account");
                 
                 messageBusClient.PublishMessage(new
